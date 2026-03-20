@@ -1,0 +1,27 @@
+FROM node:20-alpine
+
+# Install poppler-utils for PDF-to-image conversion (OCR pipeline)
+RUN apk add --no-cache poppler-utils curl
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
+
+# Copy source
+COPY backend/ ./backend/
+COPY pipeline/ ./pipeline/
+COPY .env.example ./.env.example
+
+# Create uploads dir
+RUN mkdir -p uploads logs
+
+# Non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser:appgroup /app
+USER appuser
+
+EXPOSE 5000
+
+CMD ["node", "backend/server.js"]

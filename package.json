@@ -1,0 +1,63 @@
+{
+  "name": "yojana-mitra-backend",
+  "version": "1.0.0",
+  "description": "Indian government welfare scheme discovery app — backend API",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "seed": "node backend/services/seedDatabase.js",
+    "pipeline": "node pipeline/ingest.js",
+    "test": "jest --coverage --forceExit",
+    "test:watch": "jest --watch",
+    "test:integration": "jest --testPathPattern=integration --forceExit",
+    "lint": "eslint backend/ pipeline/ --ext .js",
+    "gen:admin-key": "node scripts/generate-admin-key.js",
+    "health": "node scripts/check-health.js",
+    "reset:cache": "node scripts/reset-cache.js",
+    "migrate:indexes": "node scripts/migrate-indexes.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "express-rate-limit": "^7.2.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "ioredis": "^5.3.2",
+    "mongoose": "^8.2.4",
+    "multer": "^1.4.5-lts.1",
+    "node-cache": "^5.1.2",
+    "pdf-parse": "^1.1.1",
+    "tesseract.js": "^5.0.5",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.1.1",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/backend/__tests__/**/*.test.js",
+      "**/backend/__tests__/**/*.integration.test.js"
+    ],
+    "collectCoverageFrom": [
+      "backend/services/*.js",
+      "backend/routes/*.js",
+      "pipeline/*.js"
+    ],
+    "coverageThreshold": {
+      "global": { "lines": 70 }
+    },
+    "setupFiles": [
+      "<rootDir>/backend/__tests__/setup.js"
+    ],
+    "testTimeout": 30000
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
